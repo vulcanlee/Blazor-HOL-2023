@@ -149,7 +149,7 @@ try
                 ValidIssuer = builder.Configuration[AppSettingHelper.ValidIssuer],
                 ValidAudience = builder.Configuration[AppSettingHelper.ValidAudience],
                 IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8
-                .GetBytes(builder.Configuration[AppSettingHelper.ValidAudience])),
+                .GetBytes(builder.Configuration[AppSettingHelper.IssuerSigningKey])),
                 RequireExpirationTime = true,
                 ClockSkew = TimeSpan.Zero,
             };

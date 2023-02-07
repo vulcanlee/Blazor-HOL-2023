@@ -137,7 +137,7 @@ namespace Backend.Controllers
                 //notBefore: DateTime.Now.AddMinutes(-5),
                 signingCredentials: new SigningCredentials(new SymmetricSecurityKey
                             (Encoding.UTF8.GetBytes(tokenConfiguration.IssuerSigningKey)),
-                        SecurityAlgorithms.HmacSha512)
+                        SecurityAlgorithms.HmacSha256)
             );
             string tokenString = new JwtSecurityTokenHandler().WriteToken(token);
 
@@ -165,7 +165,7 @@ namespace Backend.Controllers
                 //notBefore: DateTime.Now.AddMinutes(-5),
                 signingCredentials: new SigningCredentials(new SymmetricSecurityKey
                             (Encoding.UTF8.GetBytes(tokenConfiguration.IssuerSigningKey)),
-                        SecurityAlgorithms.HmacSha512)
+                        SecurityAlgorithms.HmacSha256)
             );
             string tokenString = new JwtSecurityTokenHandler().WriteToken(token);
 

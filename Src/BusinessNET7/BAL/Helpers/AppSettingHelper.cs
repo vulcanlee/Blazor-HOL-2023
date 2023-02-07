@@ -23,6 +23,7 @@ namespace BAL.Helpers
         public static readonly string Tokens = "BackendTokens";
         public static readonly string ValidIssuer = "BackendTokens:ValidIssuer";
         public static readonly string ValidAudience = "BackendTokens:ValidAudience";
+        public static readonly string IssuerSigningKey = "BackendTokens:IssuerSigningKey";
         #endregion
     }
 }
