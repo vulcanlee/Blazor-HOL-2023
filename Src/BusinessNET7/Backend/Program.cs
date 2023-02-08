@@ -78,6 +78,15 @@ try
     #endregion
     #endregion
 
+    #region 加入設定強型別注入宣告
+    builder.Services.Configure<BackendTokenConfiguration>(builder.Configuration
+        .GetSection(AppSettingHelper.Tokens));
+    builder.Services.Configure<BackendSmtpClientInformation>(builder.Configuration
+        .GetSection(AppSettingHelper.BackendSmtpClientInformation));
+    builder.Services.Configure<BackendInitializer>(builder.Configuration
+        .GetSection(AppSettingHelper.BackendInitializer));
+    #endregion
+
     #region Syncfusion 元件與多國語言服務
     // Localization https://github.com/syncfusion/blazor-locale
     // 各國語言代碼 https://en.wikipedia.org/wiki/Language_localisation
@@ -120,16 +129,13 @@ try
     builder.Services.AddAutoMapper(c => c.AddProfile<AutoMapping>());
     #endregion
 
-    #region 加入設定強型別注入宣告
-    builder.Services.Configure<BackendTokenConfiguration>(builder.Configuration
-        .GetSection(AppSettingHelper.Tokens));
-    builder.Services.Configure<BackendSmtpClientInformation>(builder.Configuration
-        .GetSection(AppSettingHelper.BackendSmtpClientInformation));
-    builder.Services.Configure<BackendInitializer>(builder.Configuration
-        .GetSection(AppSettingHelper.BackendInitializer));
+    #region 加入使用 Cookie & JWT 認證需要的宣告
+    #region 取得 IServiceProvider 要進行注入 IOptions
+    using ServiceProvider serviceProvider = builder.Services.BuildServiceProvider();
+    BackendTokenConfiguration tokenConfiguration = serviceProvider
+        .GetService<IOptions<BackendTokenConfiguration>>().Value;
     #endregion
 
-    #region 加入使用 Cookie & JWT 認證需要的宣告
     builder.Services.Configure<CookiePolicyOptions>(options =>
     {
         options.CheckConsentNeeded = context => true;
@@ -146,10 +152,10 @@ try
                 ValidateAudience = true,
                 ValidateLifetime = true,
                 ValidateIssuerSigningKey = true,
-                ValidIssuer = builder.Configuration[AppSettingHelper.ValidIssuer],
-                ValidAudience = builder.Configuration[AppSettingHelper.ValidAudience],
+                ValidIssuer = tokenConfiguration.ValidIssuer,
+                ValidAudience = tokenConfiguration.ValidAudience,
                 IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8
-                .GetBytes(builder.Configuration[AppSettingHelper.IssuerSigningKey])),
+                .GetBytes(tokenConfiguration.IssuerSigningKey)),
                 RequireExpirationTime = true,
                 ClockSkew = TimeSpan.Zero,
             };
